@@ -24,6 +24,49 @@ to the require section of your `composer.json` file.
 Usage
 -----
 
+```php
+<?php
+
+namespace app\controllers;
+
+use Yii;
+use yii\web\Controller;
+use yii\filters\AccessControl;
+
+class MyController extends Controller
+{
+
+    /** @inheritdoc */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => [
+                            'upload'
+                        ],
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => 'yuncms\ueditor\UEditorAction',
+                //etc...
+            ],
+        ];
+    }
+}
+````
+
 Once the extension is installed, simply use it in your code by  :
 
 ```php

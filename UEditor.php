@@ -41,7 +41,7 @@ class UEditor extends InputWidget
             'autoHeightEnabled' => true,
             'initialFrameWidth' => '100%',
             'initialFrameHeight' => '300',
-            'serverUrl' => Url::to(['ueditor']),
+            'serverUrl' => Url::to(['upload']),
             'lang' => Yii::$app->language == 'zh-CN' ? 'zh-cn' : 'en',
         ], $this->clientOptions);
     }
