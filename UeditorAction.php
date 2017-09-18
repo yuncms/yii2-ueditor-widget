@@ -4,6 +4,7 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
+
 namespace yuncms\ueditor;
 
 use Yii;
@@ -45,21 +46,31 @@ class UEditorAction extends Action
     public function init()
     {
         parent::init();
+        $this->initClientOptions();
         //关闭CSRF
         $this->controller->enableCsrfValidation = false;
-        //将系统默认的后缀限制,转换成ue专用的
-        $this->imageAllowFiles = $this->normalizeExtension($this->getSetting('imageAllowFiles'));
-        $this->videoAllowFiles = $this->normalizeExtension($this->getSetting('videoAllowFiles'));
-        $this->fileAllowFiles = $this->normalizeExtension($this->getSetting('fileAllowFiles'));
+    }
 
+    /**
+     * 获取客户端配置
+     * @return void
+     */
+    public function initClientOptions()
+    {
+        $fileAllowFiles = $this->normalizeExtension($this->getSetting('fileAllowFiles'));
+        $imageAllowFiles = $this->normalizeExtension($this->getSetting('imageAllowFiles'));
+        $videoAllowFiles = $this->normalizeExtension($this->getSetting('videoAllowFiles'));
 
+        $imageMaxSize = $this->getMaxUploadByte($this->getSetting('imageMaxSize'));
+        $videoMaxSize = $this->getMaxUploadByte($this->getSetting('videoMaxSize'));
+        $fileMaxSize = $this->getMaxUploadByte($this->getSetting('fileMaxSize'));
         $this->options = ArrayHelper::merge([
             "imageActionName" => "upload-image",
             "imageFieldName" => "upfile",
             /* 上传大小限制，单位B */
-            "imageMaxSize" => $this->getMaxUploadByte($this->getSetting('imageMaxSize')),
+            "imageMaxSize" => $imageMaxSize,
             /* 上传图片格式显示 */
-            "imageAllowFiles" => $this->imageAllowFiles,
+            "imageAllowFiles" => $imageAllowFiles,
             "imageCompressEnable" => true,
             "imageCompressBorder" => 1600,
             "imageInsertAlign" => "none",
@@ -68,7 +79,7 @@ class UEditorAction extends Action
             "scrawlActionName" => "upload-scrawl",
             "scrawlFieldName" => "upfile",
             /* 上传大小限制，单位B */
-            "scrawlMaxSize" => $this->getMaxUploadByte($this->getSetting('imageMaxSize')),
+            "scrawlMaxSize" => $imageMaxSize,
             /* 图片访问路径前缀 */
             "scrawlUrlPrefix" => "",
             "scrawlInsertAlign" => "none",
@@ -84,26 +95,26 @@ class UEditorAction extends Action
             "catcherFieldName" => "source",
             "catcherUrlPrefix" => "",
             /* 上传大小限制，单位B */
-            "catcherMaxSize" => $this->getMaxUploadByte($this->getSetting('imageMaxSize')),
+            "catcherMaxSize" => $imageMaxSize,
             /* 抓取图片格式显示 */
-            "catcherAllowFiles" => $this->imageAllowFiles,
+            "catcherAllowFiles" => $imageAllowFiles,
 
             /* 上传视频配置 */
             "videoActionName" => "upload-video",
             "videoFieldName" => "upfile",
             "videoUrlPrefix" => "",
             /* 视频访问路径前缀 */
-            "videoMaxSize" => $this->getMaxUploadByte($this->getSetting('videoMaxSize')),
+            "videoMaxSize" => $videoMaxSize,
             /* 上传大小限制，单位B，默认100MB */
-            "videoAllowFiles" => $this->videoAllowFiles,
+            "videoAllowFiles" => $videoAllowFiles,
 
             /* 上传文件配置 */
             "fileActionName" => "upload-file",
             "fileFieldName" => "upfile",
             "fileUrlPrefix" => "",
-            "fileMaxSize" => $this->getMaxUploadByte($this->getSetting('fileMaxSize')),
+            "fileMaxSize" => $fileMaxSize,
             /* 上传大小限制，单位B，默认50MB */
-            "fileAllowFiles" => $this->fileAllowFiles,
+            "fileAllowFiles" => $fileAllowFiles,
             /* 上传文件格式显示 */
             "imageManagerActionName" => "list-image",
             /* 执行图片管理的action名称 */
@@ -111,13 +122,13 @@ class UEditorAction extends Action
             "imageManagerListSize" => 20,
             "imageManagerUrlPrefix" => "",
             "imageManagerInsertAlign" => "none",
-            "imageManagerAllowFiles" => $this->imageAllowFiles,
+            "imageManagerAllowFiles" => $imageAllowFiles,
             /* 列出的文件类型 */
             "fileManagerActionName" => "list-file",
             "fileManagerListPath" => "",
             "fileManagerUrlPrefix" => "",
             "fileManagerListSize" => 20,
-            "fileManagerAllowFiles" => $this->fileAllowFiles
+            "fileManagerAllowFiles" => $fileAllowFiles
             /* 列出的文件类型 */
         ], $this->options);
     }
@@ -165,7 +176,7 @@ class UEditorAction extends Action
                 $fieldName = $this->options['imageFieldName'];
                 $config = [
                     'maxFiles' => 1,
-                    'extensions' =>  $this->getSetting('imageAllowFiles'),
+                    'extensions' => $this->getSetting('imageAllowFiles'),
                     'checkExtensionByMimeType' => false,
                     "maxSize" => $this->options['imageMaxSize'],
                 ];
@@ -174,7 +185,7 @@ class UEditorAction extends Action
                 $fieldName = $this->options['videoFieldName'];
                 $config = [
                     'maxFiles' => 1,
-                    'extensions' =>  $this->getSetting('videoAllowFiles'),
+                    'extensions' => $this->getSetting('videoAllowFiles'),
                     'maxSize' => $this->options['videoMaxSize'],
                     'checkExtensionByMimeType' => false,
                 ];
@@ -183,7 +194,7 @@ class UEditorAction extends Action
                 $fieldName = $this->options['fileFieldName'];
                 $config = [
                     'maxFiles' => 1,
-                    'extensions' =>  $this->getSetting('fileAllowFiles'),
+                    'extensions' => $this->getSetting('fileAllowFiles'),
                     'maxSize' => $this->options['fileMaxSize'],
                     'checkExtensionByMimeType' => false,
                 ];
@@ -206,7 +217,7 @@ class UEditorAction extends Action
         /* 上传配置 */
         $config = [
             'maxFiles' => 1,
-            'extensions' =>  $this->getSetting('imageAllowFiles'),
+            'extensions' => $this->getSetting('imageAllowFiles'),
             'checkExtensionByMimeType' => false,
             "maxSize" => $this->options['imageMaxSize'],
             "oriName" => "scrawl.png"
@@ -273,12 +284,12 @@ class UEditorAction extends Action
         switch ($action) {
             /* 列出文件 */
             case 'list-file':
-                $query->andWhere(['ext' => explode(',', Yii::$app->settings->get('fileAllowFiles','attachment'))]);
+                $query->andWhere(['ext' => explode(',', Yii::$app->settings->get('fileAllowFiles', 'attachment'))]);
                 break;
             /* 列出图片 */
             case 'list-image':
             default:
-                $query->andWhere(['ext' => explode(',', Yii::$app->settings->get('imageAllowFiles','attachment'))]);
+                $query->andWhere(['ext' => explode(',', Yii::$app->settings->get('imageAllowFiles', 'attachment'))]);
         }
         $offset = Yii::$app->request->get('start', 0);
         $limit = Yii::$app->request->get('size', $this->options['imageManagerListSize']);
@@ -289,7 +300,7 @@ class UEditorAction extends Action
             foreach ($files as $file) {
                 array_push($lists, [
                     'original' => $file['filename'],
-                    'url' => Yii::$app->settings->get('uploads','attachment') . $file['path'],
+                    'url' => $this->getSetting('storeUrl') . $file['path'],
                     'mtime' => $file['created_at']
                 ]);
             }
