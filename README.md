@@ -71,7 +71,7 @@ Once the extension is installed, simply use it in your code by  :
 
 ```php
 
-<?= $form->field($model, 'content')->widget(\xutl\ueditor\UEditor::className(),[
+<?= $form->field($model, 'content')->widget(\yuncms\ueditor\UEditor::className(),[
 	//etc...
 ]) ?>
-<?= \xutl\ueditor\UEditor::widget(); ?>
+<?= \yuncms\ueditor\UEditor::widget(); ?>
