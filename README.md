@@ -31,4 +31,4 @@ Once the extension is installed, simply use it in your code by  :
 <?= $form->field($model, 'content')->widget(\xutl\ueditor\UEditor::className(),[
 	//etc...
 ]) ?>
-<?= "<?= \xutl\ueditor\UEditor::widget(); ?>" ?>
+<?= \xutl\ueditor\UEditor::widget(); ?>
