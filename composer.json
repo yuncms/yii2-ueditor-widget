@@ -1,0 +1,25 @@
+{
+  "name": "yuncms/yii2-ueditor-widget",
+  "description": "The UEditor extension for the Yii framework",
+  "type": "yii2-extension",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "UEditor",
+    "yii2"
+  ],
+  "authors": [
+    {
+      "name": "XuTL",
+      "email": "xutl@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "~2.0.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "yuncms\\ueditor\\": ""
+    }
+  }
+}
