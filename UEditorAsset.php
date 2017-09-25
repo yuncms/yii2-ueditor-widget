@@ -15,7 +15,7 @@ use yii\web\AssetBundle;
  */
 class UEditorAsset extends AssetBundle
 {
-    public $sourcePath = '@yuncms/ueditor/assets';
+    public $sourcePath = '@vendor/yuncms/yii2-ueditor-widget/assets';
 
     public $js = [
         'ueditor.config.js',
